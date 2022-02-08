@@ -14,11 +14,15 @@ const rotaPublicacao = require('./rotas/publicacoes');
 dotenv.config();
 
 
+
 mongoose.connect(
-    process.env.MONGO_URL,{ useNewUrlParser: true, useUnifiedTopology: true },
+    process.env.MONGO_URL,
     () => {
-    console.log("Conexão ao mongo");
-});
+        console.log("Conexão ao mongo");
+    }
+);
+
+
 
 
 

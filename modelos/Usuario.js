@@ -18,7 +18,6 @@ const UsuarioSchema = new mongoose.Schema(
         senha: {
             type: String,
             require: true,
-            min: 6,
         },
         foto_perfil: {
             type: String,

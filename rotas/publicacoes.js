@@ -1,21 +1,29 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
-const Publicacao = require('../modelos/Publicacao')
+const Publicacao = require("../modelos/Publicacao");
+const Usuario = require("../modelos/Usuario");
 
 // criar uma publicação
-router.post('/', async (pedido, resposta) => {
-    const novaPublicacao = new Publicacao(pedido.body)
+router.post("/", async (pedido, resposta) => {
 
-    try {
+	const novaPublicacao = new Publicacao(pedido.body);
 
-        const PublicacaoCriada = await novaPublicacao.save()
+    console.log(pedido.body)
 
-        resposta.status(200).json(PublicacaoCriada)
+	try {
 
-    } catch (erro) {
-        resposta.status(500).json(erro)
-    }
-})
+		const PublicacaoCriada = await novaPublicacao.save();
+        
+		resposta.status(200).json(PublicacaoCriada);
+
+	} catch (erro) {
+
+        console.log("Erro 500:")
+
+		resposta.status(500).json(erro);
+
+	}
+});
 
 
 // atualizar uma publicação
@@ -86,6 +94,7 @@ router.put("/:id/curtir", async (pedido, resposta) => {
 })
 
 
+/*
 // selecionar uma publicação
 router.get('/:id', async (pedido, resposta) => {
 
@@ -99,13 +108,15 @@ router.get('/:id', async (pedido, resposta) => {
         resposta.status(500).json(erro)
     }
 })
+*/
 
 
 // selecionar publicações da linha do tempo
-router.get('/linha_do_tempo/todos', async (pedido, resposta) => {
-
+router.get('/linha', async (pedido, resposta) => {
 
     try {
+
+        console.log(pedido.body);
 
         const usuario_atual = await Usuario.findById(pedido.body.usuario_id);
 
@@ -114,16 +125,21 @@ router.get('/linha_do_tempo/todos', async (pedido, resposta) => {
         const publicacoesAmigos = await Promise.all(
 
             usuario_atual.seguindo.map((amigo_id) => {
-                return Publicacao.find({ usuario_id: amigo_id })
+                return Publicacao.find({ usuario_id: amigo_id });
             })
         );
 
-        resposta.status(200).json(publicacoesUsuario.concat(...publicacoesAmigos))
+        console.log(publicacoesUsuario);
+        console.log(publicacoesAmigos);
+
+        resposta.json(publicacoesUsuario.concat(...publicacoesAmigos))
+        
+
     } catch (erro) {
+        console.log("Erro: 500")
         resposta.status(500).json(erro)
     }
 })
-
 
 
 module.exports = router;

@@ -9,9 +9,11 @@ const bcrypt = require("bcrypt");
 router.post("/registrar", async (pedido, resposta) => {
 
     try {
+        
         // Hash a senha
         const salt = await bcrypt.genSalt(10);
         const senha_hash = await bcrypt.hash(pedido.body.senha, salt);
+
 
         // Cria novo usuario
         const novoUsuario = new Usuario({
@@ -20,8 +22,12 @@ router.post("/registrar", async (pedido, resposta) => {
             senha: senha_hash,
         });
 
+        
+        console.log(novoUsuario);
+
         // Salva usuário e responde
         const usuario = await novoUsuario.save();
+
         resposta.status(200).json(usuario);
 
     } catch (erro) {
